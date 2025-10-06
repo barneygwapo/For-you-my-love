@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>For You, My Love 💖</title>
+<style>
+:root{--pink:#ff6fb5; --purple:#9b5cff;}
+html,body{height:100%;margin:0;font-family:system-ui,Segoe UI,Roboto,Arial;overflow:hidden;background:radial-gradient(60% 60% at 20% 20%, rgba(120,40,120,0.08), transparent 10%), linear-gradient(180deg,#2a0038,#100018);color:white}
+/* elegant centered card with ambient glow */
+.container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px;box-sizing:border-box}
+.card{width:min(780px,94vw);background:linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,255,255,0.92));color:#120618;border-radius:18px;padding:22px;box-shadow:0 30px 80px rgba(0,0,0,0.6);position:relative;overflow:hidden;max-height:88vh}
+.card::before{content:'';position:absolute;inset:-20px;background:radial-gradient(circle at 20% 10%, rgba(255,111,181,0.06), transparent 20%), radial-gradient(circle at 80% 90%, rgba(155,92,255,0.04), transparent 15%);pointer-events:none;}
+
+/* ambient glow behind card */
+.ambient{position:absolute;inset:0;filter:blur(40px);opacity:0.7;pointer-events:none;background:radial-gradient(circle at 50% 20%, rgba(255,111,181,0.08), transparent 10%)} 
+
+.header{display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.title{font-weight:900;color:var(--purple);font-size:20px}
+
+.content{display:grid;grid-template-columns:1fr;gap:12px;align-items:start;z-index:2;position:relative}
+.qrbox{width:320px;height:320px;border-radius:18px;display:grid;place-items:center;background:white;position:relative;overflow:visible;cursor:pointer;margin:0 auto}
+.heartbadge{position:absolute;right:-16px;top:-16px;width:72px;height:72px;border-radius:50%;background:linear-gradient(180deg,var(--pink),var(--purple));display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:34px;box-shadow:0 10px 30px rgba(155,92,255,0.24);z-index:3}
+.qrimg{width:84%;height:84%;border-radius:8px;background:white;padding:6px;display:grid;place-items:center}
+.hint{font-size:13px;color:#5a3a5f;text-align:center;margin-top:8px}
+
+/* message area */
+.note{width:100%;max-height:420px;padding:18px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.86),rgba(255,255,255,0.8));color:#3c213e;overflow:auto;font-size:15px;display:none;box-shadow:0 10px 30px rgba(20,10,20,0.08)}
+
+/* petals and shimmer */
+.petal{position:fixed;left:0;top:0;pointer-events:none;z-index:10;opacity:0.9}
+.petal img{width:48px;height:48px;object-fit:cover;opacity:0.9;filter:drop-shadow(0 6px 12px rgba(0,0,0,0.25))}
+.shimmer{position:fixed;inset:0;pointer-events:none;z-index:9;mix-blend-mode:screen}
+.particle{position:absolute;width:6px;height:6px;border-radius:50%;background:rgba(255,200,240,0.18);box-shadow:0 0 10px rgba(255,160,210,0.12);opacity:0.9;animation:float 8s linear infinite}
+
+/* falling words and hearts */
+.falling-layer{position:fixed;inset:0;pointer-events:none;z-index:60;display:none}
+.word{position:absolute;left:0;white-space:nowrap;font-weight:900;letter-spacing:1px;text-transform:uppercase;filter:drop-shadow(0 8px 18px rgba(0,0,0,0.6));}
+.heart{position:absolute;border-radius:50%;filter:blur(.2px)}
+
+/* bottom rose */
+.footer-rose{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:18px;padding-bottom:8px}
+.footer-rose img{max-width:420px;width:90%;border-radius:10px;box-shadow:0 30px 60px rgba(155,92,255,0.12);animation:roseglow 2.6s ease-in-out infinite;}
+
+/* animations */
+@keyframes petalFall{0%{transform:translateY(-10vh) rotate(0deg) scale(0.9);opacity:0}50%{opacity:1}100%{transform:translateY(110vh) rotate(360deg) scale(1.05);opacity:0}}
+@keyframes float{0%{transform:translateY(0px) translateX(0px)}50%{transform:translateY(-20px) translateX(10px)}100%{transform:translateY(0px) translateX(0px)}}
+@keyframes roseglow{0%{box-shadow:0 8px 20px rgba(255,111,181,0.1)}50%{box-shadow:0 28px 60px rgba(255,111,181,0.26)}100%{box-shadow:0 8px 20px rgba(255,111,181,0.1)}}
+@keyframes fallA{0%{transform:translateY(-10vh) scale(.9);opacity:0}40%{opacity:1}100%{transform:translateY(120vh) scale(1.05);opacity:0}}
+
+/* responsive tweaks */
+@media (max-width:520px){.qrbox{width:260px;height:260px}.note{padding:12px} .footer-rose img{max-width:320px}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card" id="card">
+    <div class="ambient"></div>
+    <div class="header"><div class="title">For You, My Love 💖</div></div>
+    <div class="content">
+      <div class="qrbox" id="qrbox" role="button" aria-label="Tap or scan to reveal the message" tabindex="0">
+        <div class="heartbadge">❤</div>
+        <div class="qrimg"><img id="qrimg" src="https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=JETJET%0A%0ALove%20Story%20Inside&format=png&color=000000&bgcolor=FFFFFF" alt="QR code" style="max-width:100%;max-height:100%;display:block;border-radius:6px"/></div>
+      </div>
+      <div class="hint">Tap or scan the QR box to reveal the message</div>
+      <div id="noteArea" class="note"><p>I still remember the first time I saw you on Facebook. It was an ordinary day, but something about your eyes made everything else fade. They were not just beautiful. They had this quiet depth, like a universe that I could get lost in. I did not know you, but in that moment, I knew I wanted to.</p>
+<p>You had this presence that drew me in. The way you smiled, the way you carried yourself, the confidence mixed with warmth. You were stunning, and honestly, I did not think I could ever match someone like you. So I kept my distance. I admired you quietly, from afar, as if I was protecting something fragile inside me.</p>
+<p>When I first sent you a friend request, I was not expecting much. I just wanted a small connection, maybe even a glimpse into your world. And when you accepted, it felt like something small but special had begun. It was just August second, but that day became one of the most meaningful ones for me.</p>
+<p>At first, I would just react to your stories. I would see your posts, your smile, the little moments of your day, and somehow they would make my own day brighter. It became part of my routine. I would scroll through my feed, and whenever I saw your name, I felt that quiet spark again.</p>
+<p>You liked some of my notes back then, and I remember thinking maybe it was just random. Maybe you accidentally tapped. I told myself not to think too much about it. But still, it stayed in my mind. It made me wonder if maybe, just maybe, you noticed me too.</p>
+<p>Then came that Friday morning in August. It was around eleven twenty six when you replied to my story. It was such a small thing, but it changed everything for me. That message started a conversation that I never wanted to end. It was the first time I felt like the distance between us did not matter at all.</p>
+<p>From that moment on, talking to you became the best part of my day. You made me smile in ways I did not expect. You made me laugh at random things. You made ordinary moments feel warm. Every time my phone lit up with your message, I felt something real.</p>
+<p>We may be far apart, but it never feels that way when we talk. It feels like you are right beside me, like I can feel your energy through every word. Even in silence, I feel your presence. It is strange how someone so far can still feel so close.</p>
+<p>I have learned that distance does not always mean separation. Sometimes it means longing. Sometimes it means patience. And sometimes it means a stronger kind of connection, one that grows from trust and understanding. That is what we have.</p>
+<p>I think about how easily everything could have gone differently. If I had not reacted to your story. If you had not replied. If I had ignored that quiet feeling in my chest that told me to keep hoping. But you did reply. And here we are.</p>
+<p>Every time we talk, I learn something new about you. The way you think. The things that make you laugh. The dreams you hold close. You have this rare mix of strength and softness that amazes me every single time. You do not even realize how much light you bring into some one s life.</p>
+<p>Sometimes I wonder if you know how much you mean to me already. I may not say it enough, but you are always in my thoughts. Even when we are not talking, I find myself thinking about you. I wonder what you are doing, how your day is going, if you are smiling somewhere out there.</p>
+<p>There are moments when I wish I could just reach out and hold your hand, even for a second. To see your eyes not through a screen, but right in front of me. To hear your voice without the distance between us. I know that day will come. I hold on to that hope every day.</p>
+<p>Until then, I will keep cherishing every conversation, every message, every moment we share. They may seem small to the world, but they mean everything to me. They remind me that love can grow even in spaces where hands cannot yet touch.</p>
+<p>I sometimes scroll back through our messages and smile. I remember the jokes, the little teases, the soft words that lingered. I realize that what we have is something rare. It is built not on convenience, but on genuine care.</p>
+<p>You once told me something simple that I keep in my heart. You said that small things matter. And you were right. Because it was a small message that brought us here. It was a small smile that made me fall. It was a small act that turned into something beautiful.</p>
+<p>Every day, I find new reasons to admire you. It is not just your beauty, though that never fades in my eyes. It is your kindness, your patience, your quiet strength. You inspire me to be better, to try harder, to believe in something true.</p>
+<p>There are nights when I imagine meeting you in person for the first time. I imagine that moment when our eyes meet, and everything we have said through screens suddenly becomes real. I imagine the quiet after that, the feeling of finally being home.</p>
+<p>You are the calm I find after long days. You are the peace I hold onto when life feels uncertain. You are the person I never expected, but always needed. You are the reason I look forward to tomorrow.</p>
+<p>I may not say it perfectly, and I may not always find the right words, but please know this. I care about you more than I can express. You have become part of my story, part of my every day, part of my heart.</p>
+<p>One day, when distance is no longer in the way, I will tell you all this in person. I will look into your eyes and say everything that my heart has been trying to say since that first message.</p>
+<p>Until that day, I will keep choosing you in every quiet way I can. I will keep holding on to what we have. I will keep believing that what we started is only the beginning of something beautiful.</p>
+<p>I will never stop making you smile every day. I will always be by your side. Even though you made me cry last night, I will keep you in my heart and I will never stop caring for you. When you are tired I will always be there to assure you and to explain things. I will always have answers to your questions and to whatever you are thinking.</p>
+<p>Remember whatever happens I will never leave you all through ups and downs. I will stay and I will try to be the person you can count on. I promise to show up with patience and with kindness. I promise to keep learning how to love you better each day.</p>
+<p>Here s your beautiful flower my love.</p>
+<p>You are like this flower soft precious and endlessly beautiful in every way.</p>
+<p>Love, Jetjet 💖</p>
+        <div class="footer-rose">
+          <div>Here s your beautiful flower my love.</div>
+          <em>You are like this flower soft precious and endlessly beautiful in every way.</em>
+          <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1200&q=90" alt="Realistic rose"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- petals and shimmer layers -->
+<div class="shimmer" id="shimmerLayer"></div>
+<div class="falling-layer" id="fallLayer"></div>
+
+<!-- hidden YouTube iframe for music (plays when revealed) -->
+<div id="ytPlayer" style="display:none;position:fixed;left:-9999px;top:-9999px">
+  <iframe id="ytIframe" width="0" height="0" src="https://www.youtube.com/embed/2ePN7p5VA-Y?enablejsapi=1&rel=0&controls=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+</div>
+
+<script>
+const onlineQrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=JETJET%0A%0ALove%20Story%20Inside&format=png&color=000000&bgcolor=FFFFFF";
+
+// create slow drifting petals
+function spawnPetals(){
+  const shimmer = document.getElementById('shimmerLayer');
+  const count = 10;
+  for(let i=0;i<count;i++){
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.top = (-Math.random()*20 - 6) + 'vh';
+    p.style.opacity = 0.95;
+    const img = document.createElement('img');
+    img.src = 'https://images.unsplash.com/photo-1502914400459-1c7d2f7f0b3b?auto=format&fit=crop&w=80&q=60';
+    img.style.width = (36 + Math.random()*36) + 'px';
+    img.style.height = 'auto';
+    p.appendChild(img);
+    shimmer.appendChild(p);
+    const duration = 18000 + Math.random()*12000;
+    p.animate([{transform:'translateY(0px) rotate(0deg)', opacity:1},{transform:'translateY(' + (window.innerHeight + 200) + 'px) rotate('+(Math.random()*720)+'deg)', opacity:0}], {duration:duration, iterations:Infinity, delay: Math.random()*5000, easing:'linear'});
+  }
+  // soft particles
+  for(let i=0;i<16;i++){
+    const dot = document.createElement('div');
+    dot.className = 'particle';
+    dot.style.left = Math.random()*100 + 'vw';
+    dot.style.top = Math.random()*100 + 'vh';
+    dot.style.opacity = 0.6;
+    shimmer.appendChild(dot);
+  }
+}
+
+// falling words and hearts
+function startFalling(){
+  const layer = document.getElementById('fallLayer');
+  layer.style.display = 'block';
+  const phrases = ['i love you','i love you jetjet','love','ily','i love youu love'];
+  for(let i=0;i<28;i++){
+    const el = document.createElement('div');
+    el.className='word';
+    el.textContent = phrases[Math.floor(Math.random()*phrases.length)];
+    el.style.left = Math.random()*100 + 'vw';
+    el.style.top = (-Math.random()*20 - 6) + 'vh';
+    el.style.fontSize = (Math.floor(Math.random()*28)+14) + 'px';
+    el.style.color = 'transparent';
+    el.style.background = 'linear-gradient(90deg, rgba(255,111,181,0.98), rgba(155,92,255,0.98))';
+    el.style.webkitBackgroundClip = 'text';
+    el.style.backgroundClip = 'text';
+    el.style.opacity = Math.random()*0.7 + 0.3;
+    el.style.animation = 'fallA ' + (7000 + Math.floor(Math.random()*12000)) + 'ms linear ' + Math.floor(Math.random()*2000) + 'ms forwards';
+    layer.appendChild(el);
+  }
+  for(let i=0;i<18;i++){
+    const h = document.createElement('div');
+    h.className='heart';
+    const size = 8 + Math.random()*30;
+    h.style.width = size + 'px';
+    h.style.height = size + 'px';
+    h.style.left = Math.random()*100 + 'vw';
+    h.style.top = (-Math.random()*10 - 6) + 'vh';
+    h.style.background = 'linear-gradient(180deg, rgba(255,111,181,0.95), rgba(155,92,255,0.95))';
+    h.style.opacity = 0.9;
+    h.style.borderRadius = '50%';
+    layer.appendChild(h);
+    h.animate([{transform:'translateY(0px) rotate(0deg)', opacity:1},{transform:'translateY(' + (window.innerHeight + 120) + 'px) rotate('+(Math.random()*360)+'deg)', opacity:0}], {duration:6000 + Math.random()*10000, iterations:1, delay: Math.random()*2000, easing:'linear'});
+  }
+}
+
+document.getElementById('qrbox').addEventListener('click', revealAll);
+document.getElementById('qrbox').addEventListener('keydown', function(e){ if(e.key==='Enter' || e.key===' ') revealAll(); });
+
+function revealAll(){
+  const note = document.getElementById('noteArea');
+  if(note.style.display === 'block') return;
+  note.style.display = 'block';
+  startFalling();
+  // attempt to autoplay youtube (user gesture on click should allow play in many browsers)
+  try{
+    const iframe = document.getElementById('ytIframe');
+    document.getElementById('ytPlayer').style.display = 'block';
+    iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+  }catch(e){ console.log('YT play error', e); }
+}
+
+// spawn petals on load
+spawnPetals();
+
+</script>
+</body>
+</html>
